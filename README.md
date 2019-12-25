@@ -15,4 +15,3 @@
     
     
    
-.git rm -r --cached .
