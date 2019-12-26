@@ -46,7 +46,7 @@ class Product(models.Model):
 class Variation(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
-    price = models.DecimalField(max_digits=20, decimal_places=2)
+    price = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     sale_price = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     active = models.BooleanField(default=True)
     inventory = models.IntegerField(blank=True, null=True)
@@ -101,10 +101,9 @@ class ProductImage(models.Model):
     def __str__(self):
         return self.product.title
 
-
-@receiver(post_save, sender=ProductImage)
-def product_image_save_receiver(sender, instance, created, *args, **kwargs):
-    product_image = instance
-    print(instance)
-    print(sender)
-    print(*args)
+# @receiver(post_save, sender=ProductImage)
+# def product_image_save_receiver(sender, instance, created, *args, **kwargs):
+#     product_image = instance
+#     print(instance)
+#     print(sender)
+#     print(*args)
