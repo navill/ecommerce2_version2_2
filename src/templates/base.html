@@ -2,13 +2,11 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"><meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
@@ -16,33 +14,50 @@
 
     {% include 'head_css.html' %}
 
-      <style>
+    <style>
       {% block style %}{% endblock %}
-      </style>
 
 
 
-  </head>
-
-  <body>
-  {% include 'navbar.html' %}
-
-{% block jumbotron %}
-
-            {% endblock %}
-    <div class="container">
+    </style>
 
 
+</head>
 
-            {% block content %}
+<body>
+{% include 'navbar.html' %}
+{% if messages %}
 
-            {% endblock %}
+<div class='container'>
+    <div class='alert alert-success text-center alert-dismissible'>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        {% for message in messages %}
+        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p><br/>
+        {% endfor %}
+    </div>
+
+</div>
+{% endif %}
 
 
-    </div> <!-- /container -->
-
-    {% include "javascript.html" %}
+<div class="container">
 
 
-  </body>
+    {% block content %}
+
+    {% endblock %}
+
+
+</div> <!-- /container -->
+
+{% include "javascript.html" %}
+<script>
+    $(document).ready(function(){
+        {% block jquery %}{% endblock %}
+    });
+
+</script>
+
+</body>
 </html>

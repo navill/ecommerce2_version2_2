@@ -8,13 +8,13 @@ from products.views import ProductListView
 urlpatterns = [
     # Examples:
     path('', ProductListView.as_view(), name='home'),
+    path('admin/', admin.site.urls),
     # path(r'^contact/$', 'newsletter.views.contact', name='contact'),
     # path('about/', 'ecommerce2.views.about', name='about'),
     # path(r'^blog/', include('blog.urls')),
-
-    path('admin/', admin.site.urls),
-    # path('accounts/', include('registration.backends.default.urls')),
+    path('accounts/', include('registration.backends.default.urls')),
     path('products/', include('products.urls')),
+    path('categories/', include('products.urls_categories')),
 ]
 
 if settings.DEBUG:
