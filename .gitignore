@@ -109,3 +109,5 @@ migrations/
 
 .idea/
 admin/
+
+requirements.txt

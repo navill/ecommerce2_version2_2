@@ -3,11 +3,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from products.views import ProductListView
+from newsletter.views import home
 
 urlpatterns = [
     # Examples:
-    path('', ProductListView.as_view(), name='home'),
+    path('', home, name='home'),
     path('admin/', admin.site.urls),
     # path(r'^contact/$', 'newsletter.views.contact', name='contact'),
     # path('about/', 'ecommerce2.views.about', name='about'),

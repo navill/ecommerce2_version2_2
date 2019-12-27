@@ -1,3 +1,5 @@
+import random
+
 from django.contrib import messages
 from django.db.models import Q
 from django.http import Http404
@@ -82,6 +84,13 @@ class ProductListView(ListView):
 
 class ProductDetailView(DetailView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        instance = self.get_object()
+        # context["related"] = Product.objects.get_related(obj).order_by("?")[:6]
+        context["related"] = sorted(Product.objects.get_related(instance)[:6], key=lambda x: random.random())
+        return context
 
 
 def product_detail_view_func(request, id):

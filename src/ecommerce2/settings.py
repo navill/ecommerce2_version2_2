@@ -42,7 +42,8 @@ INSTALLED_APPS = [  # components
     'registration',  # should be immediately above 'django.contrib.admin'
     'blog',
     'searches',
-    'products'
+    'products',
+    'newsletter',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 MIDDLEWARE = [

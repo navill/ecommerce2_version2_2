@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+<h1>All Products
+    <small><a href='{% url "categories" %}'>Categories</a></small>
+</h1>
 
-<table class="table">
-    {% for object in object_list %}
-        <tr>
-            <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
-        </tr>
-    {% endfor %}
-</table>
+{% include "products/products.html" with object_list=object_list %}
+
 {% endblock %}

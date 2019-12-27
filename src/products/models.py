@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 
@@ -24,6 +25,12 @@ class ProductManager(models.Manager):
         # get_queryset()은 ProdutQuerySet을 리턴하기 때문에 active()를 사용할 수 있다.
         return self.get_queryset().active()
 
+    def get_related(self, instance):
+        products_one = self.get_queryset().filter(categories__in=instance.categories.all())
+        products_two = self.get_queryset().filter(default=instance.default)
+        qs = (products_one | products_two).exclude(id=instance.id).distinct()  # .order_by("?")[:6]
+        return qs
+
 
 class Product(models.Model):
     title = models.CharField(max_length=120)
@@ -37,11 +44,21 @@ class Product(models.Model):
 
     objects = ProductManager()
 
+    class Meta:
+        ordering = ["-title"]
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"pk": self.pk})
+
+    def get_image_url(self):
+        img = self.productimage_set.first()
+        if img:
+            # directory path
+            return img.image.url
+        return img
 
 
 class Variation(models.Model):
@@ -63,6 +80,14 @@ class Variation(models.Model):
 
     def get_absolute_url(self):
         return self.product.get_absolute_url()
+
+    def get_html_price(self):
+        if self.sale_price is not None:
+            html_text = "<span class='sale-price'>%s</span> <span class='og-price'>%s</span>" % (
+                self.sale_price, self.price)
+        else:
+            html_text = "<span class='price'>%s</span>" % (self.price)
+        return mark_safe(html_text)
 
 
 # 1.decorator
@@ -90,7 +115,7 @@ def image_upload_to(instance, filename):
     # instance.id==None
     slug = slugify(title)
     basename, file_extension = filename.split(".")
-    new_filename = f"{slug}-{instance.id}.{file_extension}"
+    new_filename = f"{slug}-{instance.product.id}.{file_extension}"
     return f"products/{slug}/{new_filename}"
 
 
@@ -103,12 +128,6 @@ class ProductImage(models.Model):
         return self.product.title
 
 
-# @receiver(post_save, sender=ProductImage)
-# def product_image_save_receiver(sender, instance, created, *args, **kwargs):
-#     product_image = instance
-#     print(instance)
-#     print(sender)
-#     print(*args)
 class Category(models.Model):
     title = models.CharField(max_length=120, unique=True)
     slug = models.SlugField(unique=True)
@@ -121,3 +140,29 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse("category_detail", kwargs={"slug": self.slug})
+
+
+def image_upload_to_featured(instance, filename):
+    print(instance.id)
+    print(type(instance))
+    print(dir(instance))
+    title = instance.product.title
+    slug = slugify(title)
+    basename, file_extension = filename.split(".")
+    new_filename = f"{slug}-{instance.product.id}.{file_extension}"
+    return f"products/{slug}/{new_filename}"
+
+
+class ProductFeatured(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=image_upload_to_featured)
+    title = models.CharField(max_length=120, null=True, blank=True)
+    text = models.CharField(max_length=220, blank=True, null=True)
+    text_right = models.BooleanField(default=False)
+    text_css_color = models.CharField(max_length=6, null=True, blank=True)
+    show_price = models.BooleanField(default=False)
+    make_image_background = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.product.title
