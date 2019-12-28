@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from newsletter.views import home
-
+from carts.views import CartView
 urlpatterns = [
     # Examples:
     path('', home, name='home'),
@@ -15,6 +15,7 @@ urlpatterns = [
     path('accounts/', include('registration.backends.default.urls')),
     path('products/', include('products.urls')),
     path('categories/', include('products.urls_categories')),
+    path('cart/', CartView.as_view(), name='cart'),
 ]
 
 if settings.DEBUG:

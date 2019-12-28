@@ -1,8 +1,7 @@
 <div class="row">
     {% for product in object_list %}
-        <div class='col-xs-3' {{ col_class_set }}>
+        <div class='col-xs-3 {{ col_class_set }}'>
             {% include "products/product_thumbnail.html" with product=product price="True"%}
         </div>
-        {% cycle '' '' '' '</div><hr/><div class="row">' %}
     {% endfor %}
 </div>

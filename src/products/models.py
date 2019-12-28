@@ -89,6 +89,15 @@ class Variation(models.Model):
             html_text = "<span class='price'>%s</span>" % (self.price)
         return mark_safe(html_text)
 
+    def add_to_cart(self):
+        return f"{reverse('cart')}?item={self.id}&qty=1"
+
+    def remove_from_cart(self):
+        return f"{reverse('cart')}?item={self.id}&qty=1&delete=True"
+
+    def get_title(self):
+        return f"{self.product.title}-{self.title}"
+
 
 # 1.decorator
 @receiver(post_save, sender=Product)
