@@ -17,7 +17,31 @@ $(".variation_select").change(function(){
     setPrice()
 })
 
+$("#submit-btn").click(function(event){
+	event.preventDefault();
+	var formData = $("#add-form").serialize();
+	console.log(formData);
+	$.ajax({
+		type: "GET", // "POST"
+		url: "{% url 'cart' %}",
+		data: formData,
+		success: function(data) {
+		    // $("#jquery-message").text("Added " + data.item_added + " Deleted " + data.deleted)
+			// showFlashMessage("Product added");
+			showFlashMessage(data.flash_message);
+			updateCartItemCount();
+		},
+		error: function(response, error) {
+			// console.log(response)
+			// console.log(error)
+			$("#add-form").submit()
+		}
+	})
+	// $("#add-form").submit()
+})
+
 {% endblock %}
+
 
 
 
@@ -37,7 +61,8 @@ $(".variation_select").change(function(){
         <p class="lead">{{ object.description }}</p>
     </div>
     <div class="col-sm-4">
-        <form method='GET' action="{% url 'cart' %}">
+        <form id='add-form' method='GET' action="{% url 'cart' %}">
+            <p id="jquery-message" class="lead"></p>
             {% if object.variation_set.count > 1 %}
             <h3 id='price'>{{ object.variation_set.first.price }}</h3>
 
@@ -66,7 +91,7 @@ $(".variation_select").change(function(){
             <br/>
             <input class='form-control' type='number' name='qty' value='1'/>
             <br/>
-            <input type='submit' value='Add to Cart' class='btn btn-default'/>
+            <input id="submit-btn" type='submit' value='Add to Cart' class='btn btn-default'/>
         </form>
         <br/>
         <hr/>

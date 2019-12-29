@@ -45,6 +45,7 @@ INSTALLED_APPS = [  # components
     'products',
     'newsletter',
     'carts',
+    'orders',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 MIDDLEWARE = [
