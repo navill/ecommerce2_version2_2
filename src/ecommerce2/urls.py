@@ -6,7 +6,7 @@ from django.urls import path, include
 from newsletter.views import home
 from carts.views import CartView, ItemCountView, CheckoutView
 # from orders.views import AddressSelectFormView
-from orders.views import AddressSelectFormView
+from orders.views import AddressSelectFormView, UserAddressCreateView, OrderList, OrderDetail
 
 urlpatterns = [
     # Examples:
@@ -22,6 +22,9 @@ urlpatterns = [
     path('cart/count/', ItemCountView.as_view(), name='item_count'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('checkout/address/', AddressSelectFormView.as_view(), name='order_address'),
+    path('checkout/address/add/', UserAddressCreateView.as_view(), name='user_address_create'),
+    path('orders/', OrderList.as_view(), name='orders'),
+    path('orders/<pk>/', OrderDetail.as_view(), name='order_detail'),
 ]
 
 if settings.DEBUG:

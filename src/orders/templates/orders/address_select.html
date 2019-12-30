@@ -3,12 +3,19 @@
 
 {% block content %}
 
-<form method="POST" action=''>
-    {% csrf_token %}
 
-    {{ form|crispy }}
+<div class='col-sm-4 col-sm-offset-4 text-center'>
+    <p class='lead'>
+        Select your addresses for this order.
+    </p>
+    <form method="POST" action=''>
+        {% csrf_token %}
 
-    <input type='submit' value='Select'/>
+        {{ form|crispy }}
 
-</form>
+        <input class='btn btn-default' type='submit' value='Select'/>
+        <a class='btn btn-link' href='{% url "user_address_create" %}'>Add new</a>
+
+    </form>
+</div>
 {% endblock %}

@@ -59,6 +59,7 @@ $(".item-qty").change(function(){
 
 
 
+
 </script>
 
 {% block content %}
@@ -75,8 +76,6 @@ $(".item-qty").change(function(){
         <tr id='item-{{ item.item.id }}'>
 
             <td>{{ item.item.get_title }}</td>
-
-
             <td>
                 <form action="." method="GET"><input type='hidden' name='item' value='{{ item.item.id }}'/><input
                         type='number' class='item-qty' name='qty' value='{{ item.quantity }}'/><input type='submit'
@@ -88,11 +87,8 @@ $(".item-qty").change(function(){
             <td id='item-line-total-{{ item.item.id }}'>{{ item.line_item_total }}</td>
             <td class='text-right'><a href='{{ item.remove }}'>X</a>
 
-
             </td>
-
         </tr>
-
         {% endfor %}
 
         <tr>
@@ -100,13 +96,16 @@ $(".item-qty").change(function(){
         </tr>
 
         <tr>
-            <td colspan='4' class='text-right'>Tax (Estimated): <span id='taxtotal'>{{ object.tax_total }}</span></td>
+            <td colspan='4' class='text-right'>Tax (Estimated): <span id='taxtotal'>{{ object.tax_total }}</span>
+            </td>
         </tr>
 
         <tr>
             <td colspan='4' class='text-right'>Total: <span id='carttotal'>{{ object.total }}</span></td>
         </tr>
-
+        <tr>
+            <td colspan='4' class='text-right'><a class='btn btn-warning' href="{% url 'checkout' %}">Checkout </a></td>
+        </tr>
     </table>
     {% endif %}
 </div>
